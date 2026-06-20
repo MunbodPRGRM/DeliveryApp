@@ -52,22 +52,25 @@ class SentShipmentsScreen extends StatelessWidget {
                   textAlign: TextAlign.center),
             );
           }
-          return ListView.separated(
+          return ListView.builder(
+            padding: const EdgeInsets.all(12),
             itemCount: items.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, i) {
               final s = items[i];
-              return ListTile(
-                leading: const Icon(Icons.inventory_2_outlined),
-                title: Text('ถึง: ${s.receiverName} (${s.receiverPhone})'),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: StatusBadge(status: s.status),
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => ShipmentDetailScreen(shipmentId: s.id),
+              return Card(
+                child: ListTile(
+                  leading: const Icon(Icons.inventory_2_outlined,
+                      color: Color(0xFF00897B)),
+                  title: Text('ถึง: ${s.receiverName} (${s.receiverPhone})'),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: StatusBadge(status: s.status),
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ShipmentDetailScreen(shipmentId: s.id),
+                    ),
                   ),
                 ),
               );

@@ -7,6 +7,7 @@ import 'screens/auth/auth_gate.dart';
 import 'services/auth_service.dart';
 import 'services/cloudinary_service.dart';
 import 'services/firestore_service.dart';
+import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,10 +30,7 @@ class DeliveryApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Delivery App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: AppTheme.light(),
         debugShowCheckedModeBanner: false,
         home: const AuthGate(),
       ),

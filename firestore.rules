@@ -1,0 +1,65 @@
+rules_version = '2';
+
+// กฎความปลอดภัย Firestore สำหรับ Delivery App
+// หลักการ: ต้อง login ก่อนทุกกรณี, เขียนข้อมูลของตัวเองได้, ไรเดอร์เปลี่ยนสถานะงานได้
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // ---------- users ----------
+    // อ่านได้ทุกคนที่ login (จำเป็นสำหรับค้นหาผู้รับจากเบอร์โทร)
+    // เขียนได้เฉพาะเจ้าของบัญชี
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(uid);
+    }
+
+    // ---------- riders ----------
+    // อ่านได้ทุกคนที่ login (จำเป็นสำหรับติดตามตำแหน่งไรเดอร์ real-time)
+    // เขียนได้เฉพาะเจ้าของบัญชีไรเดอร์
+    match /riders/{uid} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(uid);
+    }
+
+    // ---------- shipments ----------
+    match /shipments/{id} {
+      // อ่านได้ถ้าเกี่ยวข้อง (ผู้ส่ง/ผู้รับ/ไรเดอร์ที่รับงาน)
+      // หรือเป็นงานว่าง (status 1) เพื่อให้ไรเดอร์เห็นลิสท์งานที่รับได้
+      allow read: if isSignedIn() && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.receiverId == request.auth.uid ||
+        resource.data.riderId == request.auth.uid ||
+        resource.data.status == 1
+      );
+
+      // สร้างได้เฉพาะผู้ส่งเป็นตัวเอง และต้องเริ่มที่สถานะ 1 ไม่มีไรเดอร์
+      allow create: if isSignedIn()
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.status == 1
+        && request.resource.data.riderId == null;
+
+      // อัพเดทได้โดยไรเดอร์เท่านั้น:
+      //  - ไรเดอร์ที่รับงานนี้อยู่แล้ว (รับสินค้า/ส่งสำเร็จ/ยกเลิก)
+      //  - หรือไรเดอร์กดรับงานว่าง (เดิม null+status1 → ตั้ง riderId เป็นตัวเอง)
+      allow update: if isSignedIn() && (
+        resource.data.riderId == request.auth.uid ||
+        (
+          resource.data.riderId == null &&
+          resource.data.status == 1 &&
+          request.resource.data.riderId == request.auth.uid
+        )
+      );
+
+      // ไม่อนุญาตให้ลบ shipment
+      allow delete: if false;
+    }
+  }
+}

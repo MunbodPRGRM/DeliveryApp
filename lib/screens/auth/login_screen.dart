@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
+import '../../theme/app_theme.dart';
 import 'register_user_screen.dart';
 import 'register_rider_screen.dart';
 
@@ -67,11 +68,23 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.local_shipping, size: 72),
-                const SizedBox(height: 8),
+                Container(
+                  width: 96,
+                  height: 96,
+                  decoration: BoxDecoration(
+                    color: AppTheme.seed.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.local_shipping,
+                      size: 52, color: AppTheme.seed),
+                ),
+                const SizedBox(height: 12),
                 const Text('Delivery App',
                     style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text('ส่งของถึงมือผู้รับ',
+                    style: TextStyle(color: Colors.grey.shade600)),
                 const SizedBox(height: 24),
                 SegmentedButton<AccountRole>(
                   segments: const [

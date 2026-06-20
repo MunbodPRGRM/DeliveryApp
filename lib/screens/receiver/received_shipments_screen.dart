@@ -48,22 +48,25 @@ class ReceivedShipmentsScreen extends StatelessWidget {
           if (items.isEmpty) {
             return const Center(child: Text('ยังไม่มีสินค้าที่ส่งมาถึงคุณ'));
           }
-          return ListView.separated(
+          return ListView.builder(
+            padding: const EdgeInsets.all(12),
             itemCount: items.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, i) {
               final s = items[i];
-              return ListTile(
-                leading: const Icon(Icons.move_to_inbox_outlined),
-                title: Text('จาก: ${s.senderName} (${s.senderPhone})'),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: StatusBadge(status: s.status),
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => ShipmentDetailScreen(shipmentId: s.id),
+              return Card(
+                child: ListTile(
+                  leading: const Icon(Icons.move_to_inbox_outlined,
+                      color: Color(0xFF3949AB)),
+                  title: Text('จาก: ${s.senderName} (${s.senderPhone})'),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: StatusBadge(status: s.status),
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ShipmentDetailScreen(shipmentId: s.id),
+                    ),
                   ),
                 ),
               );
