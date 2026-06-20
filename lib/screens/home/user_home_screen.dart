@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
 import '../location/manage_addresses_screen.dart';
+import '../receiver/received_shipments_screen.dart';
 import '../sender/sent_shipments_screen.dart';
 
 /// หน้าหลักของผู้ใช้ (Sender/Receiver) — placeholder
@@ -52,11 +53,16 @@ class UserHomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          const ListTile(
-            leading: Icon(Icons.move_to_inbox_outlined),
-            title: Text('รับสินค้า'),
-            subtitle: Text('(จะทำในขั้นถัดไป)'),
-            enabled: false,
+          ListTile(
+            leading: const Icon(Icons.move_to_inbox_outlined),
+            title: const Text('รับสินค้า'),
+            subtitle: const Text('ดูสถานะและติดตามของที่ส่งมาถึงคุณ'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const ReceivedShipmentsScreen(),
+              ),
+            ),
           ),
         ],
       ),
