@@ -67,6 +67,19 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+  # สร้างไอคอนแอปทุกขนาดจากรูปต้นฉบับรูปเดียว
+  flutter_launcher_icons: ^0.14.1
+
+# ตั้งค่าไอคอนแอป: รันด้วย `dart run flutter_launcher_icons` หลังวางรูป
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/delivery_app.png"
+  min_sdk_android: 23
+  # พื้นหลังไอคอนแบบ adaptive (Android 8+) — ปรับสีได้ตามรูป
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon/delivery_app.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
