@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
 import '../location/manage_addresses_screen.dart';
+import '../sender/sent_shipments_screen.dart';
 
 /// หน้าหลักของผู้ใช้ (Sender/Receiver) — placeholder
 /// ขั้นถัดไปจะใส่: สร้าง shipment, ลิสท์ของที่ส่ง/ของที่รับ, แผนที่ไรเดอร์
@@ -40,9 +41,20 @@ class UserHomeScreen extends StatelessWidget {
               ),
             ),
           ),
+          ListTile(
+            leading: const Icon(Icons.local_shipping_outlined),
+            title: const Text('ส่งสินค้า'),
+            subtitle: const Text('สร้างรายการส่งและติดตามสถานะ'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const SentShipmentsScreen(),
+              ),
+            ),
+          ),
           const ListTile(
-            leading: Icon(Icons.local_shipping_outlined),
-            title: Text('ส่ง/รับสินค้า'),
+            leading: Icon(Icons.move_to_inbox_outlined),
+            title: Text('รับสินค้า'),
             subtitle: Text('(จะทำในขั้นถัดไป)'),
             enabled: false,
           ),

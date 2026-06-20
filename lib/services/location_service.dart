@@ -26,6 +26,16 @@ class LocationService {
     );
   }
 
+  /// stream ตำแหน่งแบบต่อเนื่อง (ใช้ในหน้าแผนที่ไรเดอร์ real-time)
+  /// distanceFilter = ขยับอย่างน้อยกี่เมตรถึงจะส่ง event ใหม่ (ลดการเขียนถี่)
+  Stream<Position> positionStream({int distanceFilter = 5}) =>
+      Geolocator.getPositionStream(
+        locationSettings: LocationSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter: distanceFilter,
+        ),
+      );
+
   /// ระยะทางเป็นเมตรระหว่าง 2 พิกัด (ใช้เช็คเงื่อนไข 20 เมตรภายหลัง)
   double distanceMeters(
     double lat1,

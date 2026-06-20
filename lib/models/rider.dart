@@ -10,6 +10,8 @@ class Rider {
   final String vehiclePhotoUrl; // รูปยานพาหนะ
   final String licensePlate; // ทะเบียนรถ
   final String? currentShipmentId; // != null = กำลังมีงาน (กันรับงานซ้อน)
+  final double? currentLat; // ตำแหน่ง real-time
+  final double? currentLng;
 
   const Rider({
     required this.uid,
@@ -19,7 +21,12 @@ class Rider {
     this.vehiclePhotoUrl = '',
     this.licensePlate = '',
     this.currentShipmentId,
+    this.currentLat,
+    this.currentLng,
   });
+
+  /// มีพิกัด real-time พร้อมแสดงบนแผนที่หรือยัง
+  bool get hasLocation => currentLat != null && currentLng != null;
 
   Map<String, dynamic> toMap() => {
         'phone': phone,
@@ -41,6 +48,8 @@ class Rider {
       vehiclePhotoUrl: (data['vehiclePhotoUrl'] ?? '') as String,
       licensePlate: (data['licensePlate'] ?? '') as String,
       currentShipmentId: data['currentShipmentId'] as String?,
+      currentLat: (data['currentLat'] as num?)?.toDouble(),
+      currentLng: (data['currentLng'] as num?)?.toDouble(),
     );
   }
 }
