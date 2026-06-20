@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "803915294344",
+    "project_id": "delivery-app-c21cb",
+    "storage_bucket": "delivery-app-c21cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803915294344:android:497efe76d2909bf935613d",
+        "android_client_info": {
+          "package_name": "com.example.delivery_app_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQEN2qKK2xOYxgSguSxbZ_Fut05odNTp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
