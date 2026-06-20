@@ -53,9 +53,15 @@ class AuthService {
     required String phone,
     required String password,
     required String name,
+    String photoUrl = '',
   }) async {
     final cred = await _createAuthAccount(phone, password, AccountRole.user);
-    final user = AppUser(uid: cred.user!.uid, phone: phone, name: name);
+    final user = AppUser(
+      uid: cred.user!.uid,
+      phone: phone,
+      name: name,
+      photoUrl: photoUrl,
+    );
     await _firestore.collection('users').doc(cred.user!.uid).set(user.toMap());
   }
 
@@ -65,6 +71,8 @@ class AuthService {
     required String password,
     required String name,
     required String licensePlate,
+    String photoUrl = '',
+    String vehiclePhotoUrl = '',
   }) async {
     final cred = await _createAuthAccount(phone, password, AccountRole.rider);
     final rider = Rider(
@@ -72,6 +80,8 @@ class AuthService {
       phone: phone,
       name: name,
       licensePlate: licensePlate,
+      photoUrl: photoUrl,
+      vehiclePhotoUrl: vehiclePhotoUrl,
     );
     await _firestore.collection('riders').doc(cred.user!.uid).set(rider.toMap());
   }

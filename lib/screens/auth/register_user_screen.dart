@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
+import '../../services/cloudinary_service.dart';
+import '../../widgets/photo_picker_field.dart';
 import 'login_screen.dart' show validatePhone;
 
 /// สมัครบัญชีผู้ใช้ (User)
@@ -18,6 +21,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
   final _name = TextEditingController();
   final _phone = TextEditingController();
   final _password = TextEditingController();
+  XFile? _photo;
   bool _loading = false;
 
   @override
@@ -32,19 +36,31 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     try {
+      var photoUrl = '';
+      if (_photo != null) {
+        photoUrl = await context.read<CloudinaryService>().uploadImage(_photo!);
+      }
+      if (!mounted) return;
       await context.read<AuthService>().registerUser(
             phone: _phone.text.trim(),
             password: _password.text,
             name: _name.text.trim(),
+            photoUrl: photoUrl,
           );
       if (mounted) Navigator.of(context).pop(); // AuthGate จะพาเข้าหน้า home
     } on AuthException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.message)));
-      }
+      _showError(e.message);
+    } on CloudinaryException catch (e) {
+      _showError(e.message);
     } finally {
       if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  void _showError(String msg) {
+    if (mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
@@ -58,6 +74,12 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
           key: _formKey,
           child: Column(
             children: [
+              PhotoPickerField(
+                file: _photo,
+                label: 'รูปโปรไฟล์ (ไม่บังคับ)',
+                onPicked: (f) => setState(() => _photo = f),
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _name,
                 decoration: const InputDecoration(

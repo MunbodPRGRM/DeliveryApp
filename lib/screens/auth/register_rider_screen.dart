@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
+import '../../services/cloudinary_service.dart';
+import '../../widgets/photo_picker_field.dart';
 import 'login_screen.dart' show validatePhone;
 
 /// สมัครบัญชีไรเดอร์ (Rider)
@@ -19,6 +22,8 @@ class _RegisterRiderScreenState extends State<RegisterRiderScreen> {
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final _plate = TextEditingController();
+  XFile? _photo;
+  XFile? _vehiclePhoto;
   bool _loading = false;
 
   @override
@@ -34,20 +39,36 @@ class _RegisterRiderScreenState extends State<RegisterRiderScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     try {
+      final cloudinary = context.read<CloudinaryService>();
+      var photoUrl = '';
+      var vehicleUrl = '';
+      if (_photo != null) photoUrl = await cloudinary.uploadImage(_photo!);
+      if (_vehiclePhoto != null) {
+        vehicleUrl = await cloudinary.uploadImage(_vehiclePhoto!);
+      }
+      if (!mounted) return;
       await context.read<AuthService>().registerRider(
             phone: _phone.text.trim(),
             password: _password.text,
             name: _name.text.trim(),
             licensePlate: _plate.text.trim(),
+            photoUrl: photoUrl,
+            vehiclePhotoUrl: vehicleUrl,
           );
       if (mounted) Navigator.of(context).pop();
     } on AuthException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.message)));
-      }
+      _showError(e.message);
+    } on CloudinaryException catch (e) {
+      _showError(e.message);
     } finally {
       if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  void _showError(String msg) {
+    if (mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
@@ -61,6 +82,24 @@ class _RegisterRiderScreenState extends State<RegisterRiderScreen> {
           key: _formKey,
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PhotoPickerField(
+                    file: _photo,
+                    label: 'รูปไรเดอร์',
+                    onPicked: (f) => setState(() => _photo = f),
+                  ),
+                  PhotoPickerField(
+                    file: _vehiclePhoto,
+                    label: 'รูปยานพาหนะ',
+                    circle: false,
+                    onPicked: (f) => setState(() => _vehiclePhoto = f),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _name,
                 decoration: const InputDecoration(

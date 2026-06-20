@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'screens/auth/auth_gate.dart';
 import 'services/auth_service.dart';
+import 'services/cloudinary_service.dart';
+import 'services/firestore_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +24,8 @@ class DeliveryApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthService>(create: (_) => AuthService()),
+        Provider<FirestoreService>(create: (_) => FirestoreService()),
+        Provider<CloudinaryService>(create: (_) => CloudinaryService()),
       ],
       child: MaterialApp(
         title: 'Delivery App',

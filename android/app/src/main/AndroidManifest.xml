@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- เชื่อมต่อแผนที่ OSM / Nominatim และ Firebase -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- ตำแหน่ง GPS สำหรับเลือกพิกัด + ติดตามไรเดอร์ -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
     <application
         android:label="delivery_app_flutter"
         android:name="${applicationName}"

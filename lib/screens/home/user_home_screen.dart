@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
+import '../location/manage_addresses_screen.dart';
 
 /// หน้าหลักของผู้ใช้ (Sender/Receiver) — placeholder
 /// ขั้นถัดไปจะใส่: สร้าง shipment, ลิสท์ของที่ส่ง/ของที่รับ, แผนที่ไรเดอร์
@@ -21,9 +22,31 @@ class UserHomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('เข้าระบบเป็นผู้ใช้สำเร็จ ✅\n(หน้าส่ง/รับสินค้าจะทำขั้นถัดไป)',
-            textAlign: TextAlign.center),
+      body: ListView(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text('เข้าระบบเป็นผู้ใช้สำเร็จ ✅',
+                textAlign: TextAlign.center),
+          ),
+          ListTile(
+            leading: const Icon(Icons.location_on),
+            title: const Text('ที่อยู่ของฉัน'),
+            subtitle: const Text('เพิ่ม/แก้ไขที่อยู่และพิกัด'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const ManageAddressesScreen(),
+              ),
+            ),
+          ),
+          const ListTile(
+            leading: Icon(Icons.local_shipping_outlined),
+            title: Text('ส่ง/รับสินค้า'),
+            subtitle: Text('(จะทำในขั้นถัดไป)'),
+            enabled: false,
+          ),
+        ],
       ),
     );
   }

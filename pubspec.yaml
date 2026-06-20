@@ -43,6 +43,19 @@ dependencies:
   firebase_auth: ^6.5.3
   cloud_firestore: ^6.6.0
 
+  # แผนที่ (OpenStreetMap ฟรีไม่ต้องใช้ API key)
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
+  # GPS + คำนวณระยะทาง
+  geolocator: ^13.0.1
+
+  # เรียก Nominatim geocoding + อัพโหลด Cloudinary (REST)
+  http: ^1.2.2
+
+  # ถ่าย/เลือกรูป (โปรไฟล์, สินค้า, สถานะ)
+  image_picker: ^1.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
